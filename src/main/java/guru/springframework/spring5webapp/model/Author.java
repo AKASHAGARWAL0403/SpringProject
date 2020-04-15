@@ -2,21 +2,22 @@ package guru.springframework.spring5webapp.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Created by jt on 5/16/17.
+ */
 @Entity
 public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String firstName;
     private String lastName;
 
-    @ManyToMany
-    private Set<Book> book = new HashSet<>();
+    @ManyToMany(mappedBy = "authors")
+    private Set<Book> books  = new HashSet<>();
 
     public Author() {
     }
@@ -26,10 +27,10 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public Author(String firstName, String lastName, Set<Book> book) {
+    public Author(String firstName, String lastName, Set<Book> books) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.book = book;
+        this.books = books;
     }
 
     public Long getId() {
@@ -56,25 +57,27 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public Set<Book> getBook() {
-        return book;
+    public Set<Book> getBooks() {
+        return books;
     }
 
-    public void setBook(Set<Book> book) {
-        this.book = book;
+    public void setBooks(Set<Book> books) {
+        this.books = books;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Author author = (Author) o;
-        return Objects.equals(id, author.id);
+
+        return id != null ? id.equals(author.id) : author.id == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override
@@ -83,8 +86,7 @@ public class Author {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", book=" + book +
+                ", books=" + books +
                 '}';
     }
 }
-
